@@ -79,4 +79,8 @@ public class Asteroide {
 		return true;
 	}
 	
+	void golpear(AstroMegaShip nave) {
+		nave.descontarVida(25);
+	}
+	
 }
