@@ -13,6 +13,7 @@ public class AstroMegaShip {
 	private int velocidad;
 	private double angulo;
 	private Image imagen;
+	private int hp;
 
 	AstroMegaShip(int x, int y, int velocidad, double angulo, Image imagen) {
 		this.x = x;
@@ -22,6 +23,7 @@ public class AstroMegaShip {
 		this.velocidad = 3;
 		this.angulo = angulo;
 		this.imagen = imagen;
+		this.hp = 100;
 	}
 	
 	//Metodo para que se dibuje la nave en la pantalla
@@ -49,6 +51,11 @@ public class AstroMegaShip {
 	Rectangle rectangulo() {
 	Rectangle centroNave = new Rectangle(this.x, this.y, this.ancho, this.alto);
 		return centroNave;
+	}
+	
+	void descontarVida(int hp) {
+		this.hp -= 25;
+		System.out.println(this.hp);
 	}
 	
 	//getters
