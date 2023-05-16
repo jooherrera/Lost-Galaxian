@@ -52,6 +52,9 @@ public class Juego extends InterfaceJuego {
 				continue;
 			}
 
+// Esto es para descontarle vida a la nave
+//			asteroide.golpear(astroMegaShip);
+			
 			if (!asteroide.estaDibujando(entorno) || asteroide.estaExplotando())
 				asteroide.destruir();
 
