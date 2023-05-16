@@ -63,12 +63,12 @@ public class Juego extends InterfaceJuego {
 		}
 				//if (astroMegaShip != null) {
 				this.astroMegaShip.dibujar(this.entorno);
-				if (this.entorno.estaPresionada(this.entorno.TECLA_DERECHA)
-					&& this.astroMegaShip.getX() + this.astroMegaShip.getAncho() / 2 < this.entorno.ancho()) {
+				if (this.entorno.estaPresionada(this.entorno.TECLA_DERECHA) && this.astroMegaShip.getX() + this.astroMegaShip.getAncho() / 2 < this.entorno.ancho() ||
+						(this.entorno.estaPresionada('d') && this.astroMegaShip.getX() + this.astroMegaShip.getAncho() / 2 < this.entorno.ancho())) {
 					this.astroMegaShip.moverDerecha();
 				}
-				if (this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)
-					&& this.astroMegaShip.getX() - this.astroMegaShip.getAncho() / 2 > 0) {
+				if (this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA) && this.astroMegaShip.getX() - this.astroMegaShip.getAncho() / 2 > 0 ||
+						(this.entorno.estaPresionada('a') && this.astroMegaShip.getX() - this.astroMegaShip.getAncho() / 2 > 0)) {
 					this.astroMegaShip.moverIzquierda();
 				}
 	}
