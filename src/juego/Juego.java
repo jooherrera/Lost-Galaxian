@@ -16,28 +16,21 @@ public class Juego extends InterfaceJuego {
 	private Image imagenExplosionAsteroide = cargarImagen("imagenes/explosionAsteroide.png");
 	// Entidades
 	private Rayo rayo;
-<<<<<<< HEAD
 	private Asteroide[] asteroides;
-=======
 	private Image imagenAstroMS = Herramientas.cargarImagen("imagenes/nave3.png");
 	private AstroMegaShip astroMegaShip;
->>>>>>> AstroMegaShip
 
 	Juego() {
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
 		// Rayo
-<<<<<<< HEAD
 		this.rayo = new Rayo(500, 50, 4, Herramientas.radianes(90), imagenDelRayo);
 		// Asteroides
 		instanciarAsteroides(7);
-
-=======
 		this.rayo = new Rayo(500, 50, 4, Herramientas.radianes(180), imagenDelRayo);
 		// AstroMegaShip
 		this.astroMegaShip = new AstroMegaShip(400, 500, 2, Herramientas.radianes(0), imagenAstroMS);
 		//
->>>>>>> AstroMegaShip
 		this.entorno.iniciar();
 	}
 
@@ -68,8 +61,16 @@ public class Juego extends InterfaceJuego {
 				this.asteroides[indexDelColisionado].explotar(imagenExplosionAsteroide);
 			}
 		}
-<<<<<<< HEAD
-
+				//if (astroMegaShip != null) {
+				this.astroMegaShip.dibujar(this.entorno);
+				if (this.entorno.estaPresionada(this.entorno.TECLA_DERECHA)
+					&& this.astroMegaShip.getX() + this.astroMegaShip.getAncho() / 2 < this.entorno.ancho()) {
+					this.astroMegaShip.moverDerecha();
+				}
+				if (this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)
+					&& this.astroMegaShip.getX() - this.astroMegaShip.getAncho() / 2 > 0) {
+					this.astroMegaShip.moverIzquierda();
+				}
 	}
 
 	private void instanciarAsteroides(int cantidad) {
@@ -122,18 +123,7 @@ public class Juego extends InterfaceJuego {
 
 	private Image cargarImagen(String archivo) {
 		return Herramientas.cargarImagen(archivo);
-=======
-		//if (astroMegaShip != null) {
-		this.astroMegaShip.dibujar(this.entorno);
-		if (this.entorno.estaPresionada(this.entorno.TECLA_DERECHA)
-			&& this.astroMegaShip.getX() + this.astroMegaShip.getAncho() / 2 < this.entorno.ancho()) {
-			this.astroMegaShip.moverDerecha();
-		}
-		if (this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)
-			&& this.astroMegaShip.getX() - this.astroMegaShip.getAncho() / 2 > 0) {
-			this.astroMegaShip.moverIzquierda();
-		}
->>>>>>> AstroMegaShip
+
 	}
 
 	@SuppressWarnings("unused")
