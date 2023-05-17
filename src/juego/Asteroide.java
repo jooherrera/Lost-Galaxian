@@ -80,7 +80,7 @@ public class Asteroide {
 	}
 	
 	void golpear(AstroMegaShip nave) {
-		nave.descontarVida(25);
+		nave.descontarVida(3);
 	}
 	
 }
