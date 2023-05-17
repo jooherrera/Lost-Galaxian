@@ -2,6 +2,7 @@ package juego;
 
 import java.awt.Image;
 import java.awt.Point;
+import java.util.Random;
 
 import entorno.Entorno;
 import entorno.Herramientas;
@@ -14,14 +15,18 @@ public class Juego extends InterfaceJuego {
 	private Image imagenDelRayo = cargarImagen("imagenes/rayo2.png");
 	private Image imagenDelAsteroide = cargarImagen("imagenes/asteroide.png");
 	private Image imagenExplosionAsteroide = cargarImagen("imagenes/explosionAsteroide.png");
+	private Image imagenDestructores = cargarImagen("imagenes/destructor.png");
 	// Entidades
 	private Rayo rayo;
 	private Asteroide[] asteroides;
 	private Image imagenAstroMS = Herramientas.cargarImagen("imagenes/nave3.png");
 	private AstroMegaShip astroMegaShip;
+	private Destructor miDestructor;
+
 
 	Juego() {
 		// Inicializa el objeto entorno
+		Random rand = new Random();
 		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
 		// Rayo
 		this.rayo = new Rayo(500, 50, 4, Herramientas.radianes(90), imagenDelRayo);
@@ -31,7 +36,10 @@ public class Juego extends InterfaceJuego {
 		// AstroMegaShip
 		this.astroMegaShip = new AstroMegaShip(400, 500, 2, Herramientas.radianes(0), imagenAstroMS);
 		//
+		this.miDestructor = new Destructor(250, 50, 10, Herramientas.radianes(3), imagenDestructores, imagenDestructores);
+		
 		this.entorno.iniciar();
+		
 	}
 
 	public void tick() {
@@ -41,6 +49,10 @@ public class Juego extends InterfaceJuego {
 //			if (rayo.posicion() > 500)
 //				rayo = null;
 //		}
+		miDestructor.mover(entorno.ancho(), entorno.alto());
+        // Dibuja la barra en la pantalla
+        this.miDestructor.dibujarse(this.entorno);
+    
 
 		for (int i = 0; i < asteroides.length; i++) {
 			Asteroide asteroide = asteroides[i];
