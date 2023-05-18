@@ -51,6 +51,14 @@ public class AstroMegaShip {
 		return centroNave;
 	}
 	
+	Point[] tamanio() {
+        Point p1 = new Point((int) (this.x - this.ancho), (int) this.y);
+        Point p2 = new Point((int) (this.x), (int) (this.y - this.alto));
+        Point p3 = new Point((int) (this.x + this.ancho), (int) this.y);
+        Point p4 = new Point((int) (this.x), (int) (this.y + this.alto));
+        return new Point[] { p1, p2, p3, p4 };
+    }
+	
 	//getters
 	int getX() {
 		return x;
