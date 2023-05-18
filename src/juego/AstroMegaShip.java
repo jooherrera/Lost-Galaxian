@@ -55,7 +55,7 @@ public class AstroMegaShip {
 	
 
 	void descontarVida(int hp) {
-		this.hp -= 25;
+		this.hp -= hp;
 		System.out.println(this.hp);
 	}
 
@@ -68,6 +68,9 @@ public class AstroMegaShip {
     }
 
 	
+	int hpDisponible() {
+		return this.hp;
+	}
 	//getters
 	int getX() {
 		return x;
