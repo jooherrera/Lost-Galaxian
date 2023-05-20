@@ -1,5 +1,6 @@
 package juego;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Point;
@@ -28,6 +29,7 @@ public class AstroMegaShip {
 	
 	//Metodo para que se dibuje la nave en la pantalla
 	void dibujar(Entorno entorno) {
+		entorno.dibujarRectangulo(x,y, ancho, alto, angulo, Color.red);
 		entorno.dibujarImagen(this.imagen, this.x , this.y , this.angulo);
 	}
 	
@@ -60,10 +62,11 @@ public class AstroMegaShip {
 	}
 
 	Point[] tamanio() {
-        Point p1 = new Point((int) (this.x - this.ancho), (int) this.y);
-        Point p2 = new Point((int) (this.x), (int) (this.y - this.alto));
-        Point p3 = new Point((int) (this.x + this.ancho), (int) this.y);
-        Point p4 = new Point((int) (this.x), (int) (this.y + this.alto));
+		
+        Point p1 = new Point((int) (x - ancho / 2), (int) (y + alto / 2));
+        Point p2 = new Point((int) (x - ancho / 2), (int) (y - alto / 2));
+        Point p3 = new Point((int) (x + ancho / 2), (int) (y - alto / 2));
+        Point p4 = new Point((int) (x + ancho / 2), (int) (y + alto / 2));
         return new Point[] { p1, p2, p3, p4 };
     }
 

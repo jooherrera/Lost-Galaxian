@@ -83,4 +83,27 @@ public class Asteroide {
 		nave.descontarVida(3);
 	}
 	
+boolean estaChocando(AstroMegaShip nave) {
+	boolean valor = false;
+	Point[] mallaDeLaNave = nave.tamanio();
+	Point[] mallaDelRayo = this.tamanio();
+
+	// Comprueba si la nave esta dentro del espacio del rayo o viceversa.
+	for (int i = 0; i < 4; i++) {
+		Boolean estaDentroDelRangoX = mallaDelRayo[0].getX() < mallaDeLaNave[i].getX()
+				&& mallaDeLaNave[i].getX() < mallaDelRayo[3].getX();
+		Boolean estaDentroDelRangoY = mallaDelRayo[2].getY() < mallaDeLaNave[i].getY()
+				&& mallaDeLaNave[i].getY() < mallaDelRayo[3].getY();
+
+		Boolean estaDentroDelRangoX2 = mallaDeLaNave[0].getX() < mallaDelRayo[i].getX()
+				&& mallaDelRayo[i].getX() < mallaDeLaNave[3].getX();
+		Boolean estaDentroDelRangoY2 = mallaDeLaNave[2].getY() < mallaDelRayo[i].getY()
+				&& mallaDelRayo[i].getY() < mallaDeLaNave[3].getY();
+
+		if ((estaDentroDelRangoX || estaDentroDelRangoX2) && (estaDentroDelRangoY || estaDentroDelRangoY2))
+			valor = true;
+	}
+	return valor;
+}
+	
 }
