@@ -3,8 +3,10 @@ package juego;
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
+
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
-import java.awt.Point;
 import java.util.Random;
 
 public class Juego extends InterfaceJuego {
@@ -14,93 +16,194 @@ public class Juego extends InterfaceJuego {
 	// Estado del juego
 	private int puntaje;
 	private int cantEliminados;
+	private int enemigosRestantes;
 	private int puntosPorDestructor;
 	private boolean estaGanado;
 	private boolean estaPerdido;
+	private int nivel;
+	private boolean subioDeNivel;
+	private int time;
+	private int temporizador;
 
 	// Imagenes
+	private Image imagenFondo = cargarImagen("imagenes/fondo.png");
 	private Image imagenDelRayo = cargarImagen("imagenes/rayo2.png");
 	private Image imagenDelAsteroide = cargarImagen("imagenes/asteroide.png");
-	private Image imagenExplosionAsteroide = cargarImagen("imagenes/explosionAsteroide.png");
-	private Image imagenDestructores = cargarImagen("imagenes/destructor.png");
+	private Image imagenDelDestructor = cargarImagen("imagenes/destructor2.png");
 	// Entidades
-	private Rayo rayo;
+	private Rayo rayoAstro;
 	private Asteroide[] asteroides;
-	private Image imagenAstroMS = Herramientas.cargarImagen("imagenes/nave3.png");
+	private Destructor[] destructores;
+	private Rayo[] rayosEnemigos;
+	private Image imagenAstroMegaShip = Herramientas.cargarImagen("imagenes/naveNueva.png");
 	private AstroMegaShip astroMegaShip;
-	private Destructor miDestructor;
+	private Random random = new Random();
+	private double p;
 
 	Juego() {
-		// Inicializa el objeto entorno
-		Random rand = new Random();
-		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
-		// Rayo
-		this.rayo = new Rayo(500, 150, 1, Herramientas.radianes(0), imagenDelRayo);
-		// Asteroides
-		instanciarAsteroides(7);
-		// this.rayo = new Rayo(500, 50, 4, Herramientas.radianes(180), imagenDelRayo);
-		// AstroMegaShip
-		this.astroMegaShip = new AstroMegaShip(400, 500, 2, Herramientas.radianes(0), imagenAstroMS);
-		//
-		this.miDestructor = new Destructor(250, 50, 10, Herramientas.radianes(3), imagenDestructores,
-				imagenDestructores);
 
+		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
+
+		// Valores de estado del juego
+		this.nivel = 1;
 		this.puntaje = 0;
 		this.cantEliminados = 0;
 		this.puntosPorDestructor = 10;
-
+		this.enemigosRestantes = 0;
 		this.estaGanado = false;
 		this.estaPerdido = false;
+		this.subioDeNivel = false;
+
+		this.astroMegaShip = new AstroMegaShip(400, 500, 2, Herramientas.radianes(270));
+		instanciarAsteroides(4);
+		cargarNivel(nivel);
+		this.p = 600;
+		this.time = 0;
+		this.temporizador = 0;
 		this.entorno.iniciar();
 	}
 
 	public void tick() {
+		time++;
+		temporizador++;
+
 		if (estaGanado) {
-			mostrarMensajeGanado();
+			entorno.cambiarFont(Font.SANS_SERIF, 50, Color.green);
+			entorno.escribirTexto("GANASTE!!", entorno.ancho() / 2 - 120, entorno.alto() / 2);
 			return;
 		}
 
 		if (estaPerdido) {
-			mostrarMensajePerdido();
+			entorno.cambiarFont(Font.SANS_SERIF, 50, Color.red);
+			entorno.escribirTexto("PERDISTE!!", entorno.ancho() / 2 - 120, entorno.alto() / 2);
 			return;
 		}
 
-		if (rayo != null) {
-			rayo.dibujar(entorno);
-			rayo.mover();
+		if (subioDeNivel) {
 
-			if (rayo.estaChocando(astroMegaShip) && !rayo.estaDestruido()) {
-				rayo.golpear(astroMegaShip);
-				rayo.destruir();
+			if (nivel % 4 == 0) {
+				entorno.cambiarFont(Font.SERIF, 75, Color.WHITE);
+				entorno.escribirTexto("CHAPTER BOSS", entorno.ancho() / 2 - 280, entorno.alto() / 2);
+			} else {
+
+				entorno.cambiarFont(Font.SANS_SERIF, 50, Color.CYAN);
+				entorno.escribirTexto("NIVEL: " + nivel, entorno.ancho() / 2 - 120, entorno.alto() / 2);
 			}
 
-			if (!rayo.estaDibujando(entorno)) {
-				rayo.destruir();
+			entorno.cambiarFont(Font.SANS_SERIF, 25, Color.green);
+			// Hace titilar el "Press ENTER" dependiendo de time. 
+			if (time / 60 % 2 == 0) {
+				entorno.escribirTexto("Press ENTER", entorno.ancho() / 2 - 100, entorno.alto() / 2 + 70);
 			}
 
-			if (rayo.estaDestruido())
-				rayo = null;
+			// Esperar el enter para cambiar al proximo nivel.
+			if (entorno.sePresiono(entorno.TECLA_ENTER))
+				subioDeNivel = false;
+			return;
 		}
 
-		miDestructor.mover(entorno.ancho(), entorno.alto());
-		// Dibuja la barra en la pantalla
-		this.miDestructor.dibujarse(this.entorno);
+		dibujarFondo();
 
+		// -----------------------------RAYO ASTROMEGASHIP ----------------------------
+
+		if (rayoAstro != null) {
+
+			rayoAstro.dibujar(entorno, imagenDelRayo);
+			rayoAstro.mover();
+
+			if (rayoAstro.estaEnRango(destructores)) {
+				rayoAstro.destruir();
+			}
+
+			if (rayoAstro.estaDestruido())
+				rayoAstro = null;
+		}
+
+		// -----------------------------RAYOS ENEMIGOS ----------------------------
+		for (int r = 0; r < rayosEnemigos.length; r++) {
+			Rayo rayoEnemigo = rayosEnemigos[r];
+
+			if (rayoEnemigo != null) {
+
+				rayoEnemigo.dibujar(entorno, imagenDelRayo);
+				rayoEnemigo.mover();
+
+				if (!rayoEnemigo.estaDestruido() && rayoEnemigo.estaEnRango(astroMegaShip)) {
+					rayoEnemigo.golpear(astroMegaShip);
+					rayoEnemigo.destruir();
+				}
+
+				if (rayoEnemigo.estaDestruido())
+					rayosEnemigos[r] = null;
+
+			}
+		}
+
+		// ----------------------------DESTRUCTORES--------------------------------
+		int fueraDePantalla = 0;
+
+		for (int j = 0; j < destructores.length; j++) {
+			if (destructores[j] != null) {
+
+				int numeroAleatorio = random.nextInt(100);
+
+				Destructor destructor = destructores[j];
+				destructor.mover();
+
+				if (temporizador / 60 > 2) {
+					destructor.moverDerecha(entorno);
+					if (temporizador / 60 > 5)
+						temporizador = 0;	
+				} else {
+					destructor.moverIzquierda(entorno);
+				}
+
+				if (nivel % 4 == 0) {
+					destructor.inmovilizar();
+					destructor.apuntar(astroMegaShip);
+				} else {
+					destructor.movilizar();
+					destructor.NoApuntar();
+				}
+
+				destructor.dibujar(entorno, imagenDelDestructor);
+
+				if (rayosEnemigos[j] == null && numeroAleatorio > 95)
+					rayosEnemigos[j] = destructor.disparar();
+
+				if (!destructor.estaDibujando(entorno)) {
+					fueraDePantalla++;
+				}
+
+				if (fueraDePantalla == enemigosRestantes) {
+					mezclarDestructoresRestantes();
+				}
+
+				if (destructor.estaDestruido()) {
+					destructorEliminado();
+					destructores[j] = null;
+				}
+			}
+		}
+
+		// ----------------------------ASTEROIDES--------------------------------
 		for (int i = 0; i < asteroides.length; i++) {
 			Asteroide asteroide = asteroides[i];
 
 			if (asteroide.estaDestruido()) {
-				// asteroide.golpear(astroMegaShip);
 				asteroides[i] = nuevoAsteroide();
-//				destructorEliminado();
-				continue;
 			}
 
-			asteroide.dibujar(entorno);
+			asteroide.dibujar(entorno, imagenDelAsteroide);
 			asteroide.mover();
 
-			if (!asteroide.estaDibujando(entorno) || asteroide.estaExplotando())
+			if (asteroide.estaEnRango(astroMegaShip) && !asteroide.estaDestruido()) {
+				asteroide.golpear(astroMegaShip);
 				asteroide.destruir();
+			}
+//			if(asteroide.estaExplotando() && !asteroide.estaChocando(astroMegaShip)) {
+//			asteroide.destruir();
+//			}
 
 //			int indexDelColisionado = comprobarColisionEntreAsteroides(i);
 //			if (indexDelColisionado >= 0) {
@@ -108,37 +211,39 @@ public class Juego extends InterfaceJuego {
 //				this.asteroides[indexDelColisionado].explotar(imagenExplosionAsteroide);
 //			}
 
-			if (asteroide.estaChocando(astroMegaShip) && !asteroide.estaExplotando()) {
-				asteroide.golpear(astroMegaShip);
-				asteroide.explotar(imagenExplosionAsteroide);
-				asteroide.dibujar(entorno);
-			}
+//			if (asteroide.estaChocando(astroMegaShip) && !asteroide.estaExplotando()) {
+//				asteroide.golpear(astroMegaShip);
+//				asteroide.explotar();
+//				asteroide.dibujar(entorno, imagenExplosionAsteroide);
+//			}
 		}
 		// if (astroMegaShip != null) {
-		this.astroMegaShip.dibujar(this.entorno);
-		if (this.entorno.estaPresionada(this.entorno.TECLA_DERECHA)
-				&& this.astroMegaShip.getX() + this.astroMegaShip.getAncho() / 2 < this.entorno.ancho()
-				|| (this.entorno.estaPresionada('d')
-						&& this.astroMegaShip.getX() + this.astroMegaShip.getAncho() / 2 < this.entorno.ancho())) {
-			this.astroMegaShip.moverDerecha();
-		}
-		if (this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)
-				&& this.astroMegaShip.getX() - this.astroMegaShip.getAncho() / 2 > 0
-				|| (this.entorno.estaPresionada('a')
-						&& this.astroMegaShip.getX() - this.astroMegaShip.getAncho() / 2 > 0)) {
-			this.astroMegaShip.moverIzquierda();
-		}
+
+//		astroMegaShip.comprobarColisionCon(asteroides);
 
 		// IMPRIMIR EN PANTALLA
-		infoDelJuego();
-		infoDeAstroMegaShip(astroMegaShip);
-	}
+		// ----------------------------ASTROMEGASHIP--------------------------------
+		if (astroMegaShip != null) {
+			astroMegaShip.dibujar(entorno, imagenAstroMegaShip);
 
-	private void instanciarAsteroides(int cantidad) {
-		this.asteroides = new Asteroide[cantidad];
-		for (int i = 0; i < asteroides.length; i++) {
-			asteroides[i] = nuevoAsteroide();
+			if (entorno.sePresiono(entorno.TECLA_ESPACIO)) {
+				if (rayoAstro == null)
+					rayoAstro = astroMegaShip.disparar();
+			}
+
+			if (entorno.estaPresionada(entorno.TECLA_DERECHA))
+				astroMegaShip.moverDerecha(entorno);
+
+			if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA))
+				astroMegaShip.moverIzquierda(entorno);
+
+			if (astroMegaShip.estaDestruido()) {
+				estaPerdido = true;
+				return;
+			}
 		}
+
+		infoDelJuego();
 	}
 
 //	private int comprobarColisionEntreAsteroides(int index) {
@@ -156,34 +261,21 @@ public class Juego extends InterfaceJuego {
 //		return -1;
 //	}
 
-//	private Boolean estanChocando(Point[] objeto1, Point[] objeto2) {
-//		boolean valor = false;
-//		for (int i = 0; i < 4; i++) {
-//			Boolean estaDentroDelRangoX = objeto1[0].getX() < objeto2[i].getX()
-//					&& objeto2[i].getX() < objeto1[2].getX();
-//			Boolean estaDentroDelRangoY = objeto1[1].getY() < objeto2[i].getY()
-//					&& objeto2[i].getY() < objeto1[3].getY();
-//
-//			if (estaDentroDelRangoX && estaDentroDelRangoY)
-//				valor = true;
-//		}
-//		return valor;
-//	}
-
 	private Asteroide nuevoAsteroide() {
 		double randomX = Math.random() * 800 + 1;
 		double randomY = (Math.random() * 100 + 1) - 200;
 		double randomAngulo = Math.random() * 80 + 50;
 		double randomVelocidad = Math.random() * 1.5 + 1;
-		return new Asteroide(randomX, randomY, 25, randomVelocidad, Herramientas.radianes(randomAngulo),
-				imagenDelAsteroide);
+		return new Asteroide(randomX, randomY, 25, randomVelocidad, Herramientas.radianes(randomAngulo));
 	}
 
+	// -------------------------------------------------------------------------------
 	private Image cargarImagen(String archivo) {
 		return Herramientas.cargarImagen(archivo);
 	}
 
 	private void destructorEliminado() {
+		this.enemigosRestantes--;
 		this.cantEliminados++;
 	}
 
@@ -191,32 +283,125 @@ public class Juego extends InterfaceJuego {
 		this.puntaje = this.cantEliminados * puntosPorDestructor;
 	}
 
-	private void mostrarMensajeGanado() {
-		Pantalla.dibujarCartelGanado(entorno);
-	}
-
-	private void mostrarMensajePerdido() {
-		Pantalla.dibujarCartelPerdido(entorno);
-	}
-
 	private void infoDelJuego() {
 		calcularPuntaje();
-		if (puntaje > 50000) {
-			estaGanado = true;
-			return;
+
+		if (enemigosRestantes == 0) {
+
+			nivel++;
+
+			subioDeNivel = true;
+
+			if (nivel == 5) {
+				estaGanado = true;
+				return;
+			}
+
+			cargarNivel(nivel);
+
 		}
 
 		Pantalla.dibujarPuntaje(entorno, this.puntaje);
 		Pantalla.dibujarCantidadEliminados(entorno, this.cantEliminados);
-	}
 
-	private void infoDeAstroMegaShip(AstroMegaShip nave) {
-		Pantalla.dibujarVidaAstro(entorno, nave.hpDisponible());
-		estaPerdido = nave.hpDisponible() <= 0 ? true : false;
 	}
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		Juego juego = new Juego();
+	}
+	// -------------------------------------------------------------------------------
+
+	private void cargarNivel(int nivel) {
+
+		String distribucion = null;
+		switch (nivel) {
+		case 1:
+			distribucion = Nivel.uno();
+			break;
+		case 2:
+			distribucion = Nivel.dos();
+			break;
+		case 3:
+			distribucion = Nivel.tres();
+			break;
+		case 4:
+			distribucion = Nivel.boss();
+			break;
+		default:
+			distribucion = null;
+			break;
+		}
+
+		destructores = new Destructor[distribucion.length()];
+		rayosEnemigos = new Rayo[distribucion.length()];
+
+		for (int i = 0; i < destructores.length; i++) {
+			if (distribucion.charAt(i) == '1') {
+				enemigosRestantes++;
+
+				if (nivel % 4 != 0) {
+					int numeroAleatorio = random.nextInt(200);
+
+					while (numeroAleatorio < 60) {
+
+						numeroAleatorio = random.nextInt(200);
+					}
+
+					destructores[i] = new Destructor(85 + (i * 70), -numeroAleatorio , 60, 60, 1* nivel ,
+							Herramientas.radianes(90));
+				} else {
+					destructores[i] = new Destructor(85 + (i * 70), 120, 60, 60, 1, Herramientas.radianes(90));
+				}
+
+			}
+		}
+
+	}
+
+	private void dibujarFondo() {
+		p -= .3;
+		if (p <= 0) {
+			p = 600;
+		}
+		entorno.dibujarImagen(imagenFondo, 400, p - 300, 0);
+		entorno.dibujarImagen(imagenFondo, 400, p + 300, 0);
+	}
+
+	private void mezclarDestructoresRestantes() {
+		Destructor[] nuevaDistribucion = new Destructor[destructores.length];
+
+		for (int i = 0; i < enemigosRestantes; i++) {
+
+			while (true) {
+				int posicionAleatoria = random.nextInt(destructores.length);
+				if (nuevaDistribucion[posicionAleatoria] == null) {
+
+					int numeroAleatorio = random.nextInt(200);
+
+					while (numeroAleatorio < 60) {
+						numeroAleatorio = random.nextInt(200);
+					}
+
+					nuevaDistribucion[posicionAleatoria] = new Destructor(85 + (posicionAleatoria * 70),
+							-numeroAleatorio, 60, 60, 1 * nivel, Herramientas.radianes(90));
+					break;
+				}
+
+			}
+		}
+
+		for (int j = 0; j < destructores.length; j++) {
+			destructores[j] = nuevaDistribucion[j];
+		}
+
+		nuevaDistribucion = null;
+	}
+
+	private void instanciarAsteroides(int cantidad) {
+		this.asteroides = new Asteroide[cantidad];
+		for (int i = 0; i < asteroides.length; i++) {
+			asteroides[i] = nuevoAsteroide();
+		}
 	}
 }

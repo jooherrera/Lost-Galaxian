@@ -3,7 +3,6 @@ package juego;
 import java.awt.Image;
 import java.awt.Point;
 
-
 import entorno.Entorno;
 
 public class Asteroide {
@@ -12,27 +11,23 @@ public class Asteroide {
 	private double radio;
 	private double velocidad;
 	private double angulo;
-	private Image imagen;
 	private boolean destruido;
 	private boolean exploto;
 
-	Asteroide(double x, double y, double radio, double velocidad, double angulo, Image imagen) {
+	Asteroide(double x, double y, double radio, double velocidad, double angulo) {
 		this.x = x;
 		this.y = y;
 		this.radio = radio;
 		this.velocidad = velocidad;
 		this.angulo = angulo;
-		this.imagen = imagen;
 		this.destruido = false;
 		this.exploto = false;
 	}
 
-	void dibujar(Entorno entorno) {
-		entorno.dibujarImagen(this.imagen, this.x, this.y, this.angulo);
-	}
-
-	void dibujarExplosion(Image imagen) {
-		this.imagen = imagen;
+	void dibujar(Entorno entorno, Image imagen) {
+		entorno.dibujarImagen(imagen, this.x, this.y, this.angulo);
+		if (!estaDibujando(entorno))
+			destruir();
 	}
 
 	void mover() {
@@ -61,8 +56,7 @@ public class Asteroide {
 		return this.destruido;
 	}
 
-	void explotar(Image imagen) {
-		this.imagen = imagen;
+	void explotar() {
 		this.exploto = true;
 	}
 
@@ -78,32 +72,33 @@ public class Asteroide {
 			return false;
 		return true;
 	}
-	
+
 	void golpear(AstroMegaShip nave) {
 		nave.descontarVida(3);
 	}
-	
-boolean estaChocando(AstroMegaShip nave) {
-	boolean valor = false;
-	Point[] mallaDeLaNave = nave.tamanio();
-	Point[] mallaDelRayo = this.tamanio();
 
-	// Comprueba si la nave esta dentro del espacio del rayo o viceversa.
-	for (int i = 0; i < 4; i++) {
-		Boolean estaDentroDelRangoX = mallaDelRayo[0].getX() < mallaDeLaNave[i].getX()
-				&& mallaDeLaNave[i].getX() < mallaDelRayo[3].getX();
-		Boolean estaDentroDelRangoY = mallaDelRayo[2].getY() < mallaDeLaNave[i].getY()
-				&& mallaDeLaNave[i].getY() < mallaDelRayo[3].getY();
+	boolean estaEnRango(AstroMegaShip nave) {
+		boolean valor = false;
+		Point[] mallaDeLaNave = nave.tamanio();
+		Point[] mallaDelAsteroide = this.tamanio();
 
-		Boolean estaDentroDelRangoX2 = mallaDeLaNave[0].getX() < mallaDelRayo[i].getX()
-				&& mallaDelRayo[i].getX() < mallaDeLaNave[3].getX();
-		Boolean estaDentroDelRangoY2 = mallaDeLaNave[2].getY() < mallaDelRayo[i].getY()
-				&& mallaDelRayo[i].getY() < mallaDeLaNave[3].getY();
+		// Comprueba si la nave esta dentro del espacio del rayo o viceversa.
+		for (int i = 0; i < 4; i++) {
+			Boolean estaDentroDelRangoX = mallaDelAsteroide[0].getX() < mallaDeLaNave[i].getX()
+					&& mallaDeLaNave[i].getX() < mallaDelAsteroide[3].getX();
+			Boolean estaDentroDelRangoY = mallaDelAsteroide[2].getY() < mallaDeLaNave[i].getY()
+					&& mallaDeLaNave[i].getY() < mallaDelAsteroide[3].getY();
 
-		if ((estaDentroDelRangoX || estaDentroDelRangoX2) && (estaDentroDelRangoY || estaDentroDelRangoY2))
-			valor = true;
+			Boolean estaDentroDelRangoX2 = mallaDeLaNave[0].getX() < mallaDelAsteroide[i].getX()
+					&& mallaDelAsteroide[i].getX() < mallaDeLaNave[3].getX();
+			Boolean estaDentroDelRangoY2 = mallaDeLaNave[2].getY() < mallaDelAsteroide[i].getY()
+					&& mallaDelAsteroide[i].getY() < mallaDeLaNave[3].getY();
+
+			if ((estaDentroDelRangoX || estaDentroDelRangoX2) && (estaDentroDelRangoY || estaDentroDelRangoY2))
+				valor = true;
+		}
+		return valor;
 	}
-	return valor;
-}
 	
+
 }
