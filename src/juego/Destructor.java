@@ -19,6 +19,7 @@ public class Destructor {
 	private double cambioDireccion;
 	private boolean destruido;
 	private boolean movil;
+	private int DANIO_ASTRO;
 
 	public Destructor(double x, double y, double ancho, double alto, double velocidad, double angulo) {
 		this.x = x;
@@ -30,8 +31,32 @@ public class Destructor {
 		this.velocidadY = velocidad; // Ajusta la velocidad en el eje Y
 		this.cambioDireccion = 70; // Ajusta el cambio de dirección en el eje X
 		this.movil = true;
+		this.DANIO_ASTRO = 20;
 	}
 
+	boolean estaEnRango(AstroMegaShip nave) {
+		boolean valor = false;
+		Point[] mallaDeLaAstro = nave.tamanio();
+		Point[] mallaDelDestructor = this.tamanio();
+
+		// Comprueba si la nave esta dentro del espacio del rayo o viceversa.
+		for (int i = 0; i < 4; i++) {
+			Boolean estaDentroDelRangoX = mallaDelDestructor[0].getX() < mallaDeLaAstro[i].getX()
+					&& mallaDeLaAstro[i].getX() < mallaDelDestructor[3].getX();
+			Boolean estaDentroDelRangoY = mallaDelDestructor[2].getY() < mallaDeLaAstro[i].getY()
+					&& mallaDeLaAstro[i].getY() < mallaDelDestructor[3].getY();
+
+			Boolean estaDentroDelRangoX2 = mallaDeLaAstro[0].getX() < mallaDelDestructor[i].getX()
+					&& mallaDelDestructor[i].getX() < mallaDeLaAstro[3].getX();
+			Boolean estaDentroDelRangoY2 = mallaDeLaAstro[2].getY() < mallaDelDestructor[i].getY()
+					&& mallaDelDestructor[i].getY() < mallaDeLaAstro[3].getY();
+
+			if ((estaDentroDelRangoX || estaDentroDelRangoX2) && (estaDentroDelRangoY || estaDentroDelRangoY2))
+				valor = true;
+		}
+		return valor;
+	}
+	
 	public void inmovilizar() {
 		this.movil = false;
 	}
@@ -107,6 +132,10 @@ public class Destructor {
 		return this.destruido;
 	}
 
+	void golpear(AstroMegaShip nave) {
+		nave.descontarVida(DANIO_ASTRO);
+	}
+	
 	public Rayo disparar() {
 		return new Rayo((int) (x), (int) (y), 4, angulo);
 	}

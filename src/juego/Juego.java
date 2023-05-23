@@ -178,7 +178,12 @@ public class Juego extends InterfaceJuego {
 				if (fueraDePantalla == enemigosRestantes) {
 					mezclarDestructoresRestantes();
 				}
-
+				
+				if (destructor.estaEnRango(astroMegaShip) && !destructor.estaDestruido()) {
+					destructor.golpear(astroMegaShip);
+					destructor.destruir();
+				}
+				
 				if (destructor.estaDestruido()) {
 					destructorEliminado();
 					destructores[j] = null;
@@ -245,7 +250,10 @@ public class Juego extends InterfaceJuego {
 
 		infoDelJuego();
 	}
+	
+	// --------------------- FIN DE LOS TICKS ---------------------
 
+	
 //	private int comprobarColisionEntreAsteroides(int index) {
 //		Asteroide asteroide = this.asteroides[index];
 //		for (int i = 0; i < this.asteroides.length; i++) {
@@ -306,10 +314,6 @@ public class Juego extends InterfaceJuego {
 
 	}
 
-	@SuppressWarnings("unused")
-	public static void main(String[] args) {
-		Juego juego = new Juego();
-	}
 	// -------------------------------------------------------------------------------
 
 	private void cargarNivel(int nivel) {
@@ -403,5 +407,9 @@ public class Juego extends InterfaceJuego {
 		for (int i = 0; i < asteroides.length; i++) {
 			asteroides[i] = nuevoAsteroide();
 		}
+	}
+	@SuppressWarnings("unused")
+	public static void main(String[] args) {
+		Juego juego = new Juego();
 	}
 }
