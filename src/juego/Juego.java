@@ -45,7 +45,7 @@ public class Juego extends InterfaceJuego {
 		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
 
 		// Valores de estado del juego
-		this.nivel = 1;
+		this.nivel = 4;
 		this.puntaje = 0;
 		this.cantEliminados = 0;
 		this.puntosPorDestructor = 10;
@@ -114,6 +114,9 @@ public class Juego extends InterfaceJuego {
 			if (rayoAstro.estaEnRango(destructores)) {
 				rayoAstro.destruir();
 			}
+			
+			if(rayoAstro.estaEnRango(asteroides))
+				rayoAstro.destruir();
 
 			if (rayoAstro.estaDestruido())
 				rayoAstro = null;
@@ -160,7 +163,7 @@ public class Juego extends InterfaceJuego {
 
 				if (nivel % 4 == 0) {
 					destructor.inmovilizar();
-					destructor.apuntar(astroMegaShip);
+					destructor.apuntar(entorno,astroMegaShip);
 				} else {
 					destructor.movilizar();
 					destructor.NoApuntar();

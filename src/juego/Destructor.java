@@ -13,8 +13,9 @@ public class Destructor {
 	private double ancho;
 	private double alto;
 	private double angulo;
+	
 	private double velocidadX;
-	private int direccion;
+	private double direccion;
 	private double velocidadY;
 	private double cambioDireccion;
 	private boolean destruido;
@@ -27,6 +28,7 @@ public class Destructor {
 		this.ancho = 60;
 		this.alto = 60;
 		this.angulo = angulo;
+		this.direccion = angulo;
 		this.velocidadX = .5; // Ajusta la velocidad en el eje X
 		this.velocidadY = velocidad; // Ajusta la velocidad en el eje Y
 		this.cambioDireccion = 70; // Ajusta el cambio de dirección en el eje X
@@ -56,7 +58,7 @@ public class Destructor {
 		}
 		return valor;
 	}
-	
+
 	public void inmovilizar() {
 		this.movil = false;
 	}
@@ -65,8 +67,65 @@ public class Destructor {
 		this.movil = true;
 	}
 
-	public void apuntar(AstroMegaShip nave) {
-		this.angulo = Herramientas.radianes(95);
+	// Metodo para que de su posicion
+	Point posicion() {
+		Point centroNave = new Point((int) this.x, (int) this.y);
+		return centroNave;
+	}
+
+	public void apuntar(Entorno e, AstroMegaShip nave) {
+//		System.out.println(nave.posicion()); //Posicion de la astro
+//		System.out.println(this.posicion()); //Posicion del destructor
+
+		// calcular la distancia entre ambos.
+		double distancia = Point.distance(nave.posicion().getX(), nave.posicion().getY(), this.x, this.y);
+//		System.out.println(distancia);
+
+		// Catetos
+		e.dibujarCirculo(nave.posicion().getX(),nave.posicion().getY(),4,Color.red);
+		double catetoA = nave.posicion().getX() - this.x; // Cateto Adyacente
+		double catetoO = nave.posicion().getY() - this.y; // Cateto Opuesto
+
+		
+		double grados = Math.toDegrees(Math.atan(catetoO / catetoA));
+
+		double nuevoGrado = 0;
+		
+		if(grados > 0) 
+			 nuevoGrado = (Math.abs(grados) - Math.toDegrees(direccion));
+		else
+			nuevoGrado = Math.abs(Math.abs(grados) - Math.toDegrees(direccion));
+		
+		this.angulo = direccion + Herramientas.radianes(nuevoGrado);
+//		System.out.println(direccion + Herramientas.radianes(nuevoGrado));
+		// Angulo alfa
+		// tan(a) = co/ca
+//		double anguloAlfa = catetoO / catetoA ; 
+
+//		System.out.println(Math.tan(Math.cos(11) / Math.sin(7)));
+//		System.out.println(Math.sqrt(catetoA + catetoO) );
+
+//		System.out.println("Hipo: "+distancia);
+//		System.out.println("b: " + catetoA);
+//		System.out.println("a: " +( (int) nave.posicion().getY() - this.y));
+
+		
+		// FUNCIONA--------------------------------------
+//		double distancia = Point.distance(nave.posicion().getX(), nave.posicion().getY(), this.x, this.y);
+////		System.out.println(distancia);
+//
+//		// Catetos
+//		e.dibujarCirculo(nave.posicion().getX(),nave.posicion().getY(),4,Color.red);
+//		double catetoA = nave.posicion().getX() - this.x; // Cateto Adyacente
+//		double catetoO = nave.posicion().getY() - this.y; // Cateto Opuesto
+//		double grados = Math.toDegrees(Math.atan(catetoO / catetoA));
+//		System.out.println(Math.toDegrees(direccion) );
+//		
+//		System.out.println();
+//		
+//		double nuevoGrado = Math.abs(Math.abs(grados) - Math.toDegrees(direccion));
+////		System.out.println(direccion + Herramientas.radianes(90));
+//		this.angulo = direccion +  Herramientas.radianes(nuevoGrado) ;
 	}
 
 	public void dibujar(Entorno entorno, Image imagen) {
@@ -81,17 +140,20 @@ public class Destructor {
 	}
 
 	void moverDerecha(Entorno entorno) {
+		if (!movil)
+			return;
 		if (x + ancho / 2 < entorno.ancho())
 			this.x = this.x + velocidadX;
 	}
 
 	// Metodo para que la nave se dirija a la izquierda
 	void moverIzquierda(Entorno entorno) {
+		if (!movil)
+			return;
 		if (x - ancho / 2 > 0)
 			this.x = this.x - velocidadX;
 	}
-	
-	
+
 	public void mover() {
 		if (movil) {
 			y += Math.sin(angulo) * velocidadY;
@@ -135,9 +197,9 @@ public class Destructor {
 	void golpear(AstroMegaShip nave) {
 		nave.descontarVida(DANIO_ASTRO);
 	}
-	
+
 	public Rayo disparar() {
-		return new Rayo((int) (x), (int) (y), 4, angulo);
+		return new Rayo(x, y, 3.4,angulo);
 	}
 
 	public boolean estaDibujando(Entorno entorno) {
