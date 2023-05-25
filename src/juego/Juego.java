@@ -45,7 +45,7 @@ public class Juego extends InterfaceJuego {
 		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
 
 		// Valores de estado del juego
-		this.nivel = 4;
+		this.nivel = 1;
 		this.puntaje = 0;
 		this.cantEliminados = 0;
 		this.puntosPorDestructor = 10;

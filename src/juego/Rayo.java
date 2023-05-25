@@ -129,7 +129,6 @@ public class Rayo {
 						&& mallaDelRayo[i].getY() < mallaDelAsteroide[3].getY();
 
 				if ((estaDentroDelRangoX || estaDentroDelRangoX2) && (estaDentroDelRangoY || estaDentroDelRangoY2)) {
-					asteroide.destruir();
 					valor = true;
 				}
 			}
