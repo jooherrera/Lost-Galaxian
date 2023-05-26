@@ -45,7 +45,7 @@ public class Juego extends InterfaceJuego {
 		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
 
 		// Valores de estado del juego
-		this.nivel = 1;
+		this.nivel = 4;
 		this.puntaje = 0;
 		this.cantEliminados = 0;
 		this.puntosPorDestructor = 10;
@@ -146,8 +146,10 @@ public class Juego extends InterfaceJuego {
 		int fueraDePantalla = 0;
 
 		for (int j = 0; j < destructores.length; j++) {
+			
 			if (destructores[j] != null) {
-
+				
+				boolean esPar = j % 2 == 0 ? true : false; 
 				int numeroAleatorio = random.nextInt(100);
 
 				Destructor destructor = destructores[j];
@@ -162,8 +164,15 @@ public class Juego extends InterfaceJuego {
 				}
 
 				if (nivel % 4 == 0) {
+					destructor.apuntar(astroMegaShip);
 					destructor.inmovilizar();
-					destructor.apuntar(entorno,astroMegaShip);
+					if(esPar) {						
+						destructor.kamikaze();
+						if (destructor.posicion().getY() > astroMegaShip.posicion().getY() -30) {
+							destructor.movilizar();
+							destructor.NoApuntar();
+						}
+					}
 				} else {
 					destructor.movilizar();
 					destructor.NoApuntar();
@@ -171,7 +180,7 @@ public class Juego extends InterfaceJuego {
 
 				destructor.dibujar(entorno, imagenDelDestructor);
 
-				if (rayosEnemigos[j] == null && numeroAleatorio > 95)
+				if (rayosEnemigos[j] == null && numeroAleatorio > 95 )
 					rayosEnemigos[j] = destructor.disparar();
 
 				if (!destructor.estaDibujando(entorno)) {
@@ -239,10 +248,10 @@ public class Juego extends InterfaceJuego {
 					rayoAstro = astroMegaShip.disparar();
 			}
 
-			if (entorno.estaPresionada(entorno.TECLA_DERECHA))
+			if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada('d'))
 				astroMegaShip.moverDerecha(entorno);
 
-			if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA))
+			if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada('a'))
 				astroMegaShip.moverIzquierda(entorno);
 
 			if (astroMegaShip.estaDestruido()) {
@@ -358,7 +367,7 @@ public class Juego extends InterfaceJuego {
 					destructores[i] = new Destructor(85 + (i * 70), -numeroAleatorio , 60, 60, 1* nivel ,
 							Herramientas.radianes(90));
 				} else {
-					destructores[i] = new Destructor(85 + (i * 70), 120, 60, 60, 1, Herramientas.radianes(90));
+					destructores[i] = new Destructor(85 + (i * 70), 120, 60, 60, 1, Herramientas.radianes(90)); //DESPUES PLANTEAR COMO HACER QUE LOS KAMIKAZES VENGAN DE FUERA DE PANTALLA
 				}
 
 			}

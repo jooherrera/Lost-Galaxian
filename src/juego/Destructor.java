@@ -1,6 +1,5 @@
 package juego;
 
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.Point;
 
@@ -17,10 +16,10 @@ public class Destructor {
 	private double velocidadX;
 	private double direccion;
 	private double velocidadY;
-	private double cambioDireccion;
 	private boolean destruido;
 	private boolean movil;
 	private int DANIO_ASTRO;
+	private boolean kamikaze;
 
 	public Destructor(double x, double y, double ancho, double alto, double velocidad, double angulo) {
 		this.x = x;
@@ -31,11 +30,12 @@ public class Destructor {
 		this.direccion = angulo;
 		this.velocidadX = .5; // Ajusta la velocidad en el eje X
 		this.velocidadY = velocidad; // Ajusta la velocidad en el eje Y
-		this.cambioDireccion = 70; // Ajusta el cambio de dirección en el eje X
 		this.movil = true;
 		this.DANIO_ASTRO = 20;
+		this.kamikaze = false;
 	}
 
+	
 	boolean estaEnRango(AstroMegaShip nave) {
 		boolean valor = false;
 		Point[] mallaDeLaAstro = nave.tamanio();
@@ -73,22 +73,13 @@ public class Destructor {
 		return centroNave;
 	}
 
-	public void apuntar(Entorno e, AstroMegaShip nave) {
-//		System.out.println(nave.posicion()); //Posicion de la astro
-//		System.out.println(this.posicion()); //Posicion del destructor
-
-		// calcular la distancia entre ambos.
-		double distancia = Point.distance(nave.posicion().getX(), nave.posicion().getY(), this.x, this.y);
-//		System.out.println(distancia);
-
-		// Catetos
-		e.dibujarCirculo(nave.posicion().getX(),nave.posicion().getY(),4,Color.red);
+	public void apuntar(AstroMegaShip nave) {
+		
 		double catetoA = nave.posicion().getX() - this.x; // Cateto Adyacente
 		double catetoO = nave.posicion().getY() - this.y; // Cateto Opuesto
-
 		
 		double grados = Math.toDegrees(Math.atan(catetoO / catetoA));
-
+		
 		double nuevoGrado = 0;
 		
 		if(grados > 0) 
@@ -97,35 +88,7 @@ public class Destructor {
 			nuevoGrado = Math.abs(Math.abs(grados) - Math.toDegrees(direccion));
 		
 		this.angulo = direccion + Herramientas.radianes(nuevoGrado);
-//		System.out.println(direccion + Herramientas.radianes(nuevoGrado));
-		// Angulo alfa
-		// tan(a) = co/ca
-//		double anguloAlfa = catetoO / catetoA ; 
 
-//		System.out.println(Math.tan(Math.cos(11) / Math.sin(7)));
-//		System.out.println(Math.sqrt(catetoA + catetoO) );
-
-//		System.out.println("Hipo: "+distancia);
-//		System.out.println("b: " + catetoA);
-//		System.out.println("a: " +( (int) nave.posicion().getY() - this.y));
-
-		
-		// FUNCIONA--------------------------------------
-//		double distancia = Point.distance(nave.posicion().getX(), nave.posicion().getY(), this.x, this.y);
-////		System.out.println(distancia);
-//
-//		// Catetos
-//		e.dibujarCirculo(nave.posicion().getX(),nave.posicion().getY(),4,Color.red);
-//		double catetoA = nave.posicion().getX() - this.x; // Cateto Adyacente
-//		double catetoO = nave.posicion().getY() - this.y; // Cateto Opuesto
-//		double grados = Math.toDegrees(Math.atan(catetoO / catetoA));
-//		System.out.println(Math.toDegrees(direccion) );
-//		
-//		System.out.println();
-//		
-//		double nuevoGrado = Math.abs(Math.abs(grados) - Math.toDegrees(direccion));
-////		System.out.println(direccion + Herramientas.radianes(90));
-//		this.angulo = direccion +  Herramientas.radianes(nuevoGrado) ;
 	}
 
 	public void dibujar(Entorno entorno, Image imagen) {
@@ -153,29 +116,20 @@ public class Destructor {
 		if (x - ancho / 2 > 0)
 			this.x = this.x - velocidadX;
 	}
-
+	
+	public void kamikaze() {
+		this.kamikaze = true;
+	}
+	
 	public void mover() {
+		if (kamikaze) {
+			this.y += Math.sin(angulo) * 2;
+			this.x += Math.cos(angulo) * 2;
+			return;
+		}
 		if (movil) {
 			y += Math.sin(angulo) * velocidadY;
 		}
-
-//		double angulo = 0;
-//		double velocidad = 0;
-//		double nuevoX = this.x + Math.cos(angulo) * velocidad;
-//		double nuevoY = this.y + Math.sin(angulo) * velocidad;
-//
-//		if (nuevoX >= 0 && nuevoX <= anchoEntorno && nuevoY >= 0 && nuevoY <= altoEntorno) {
-//			this.x = nuevoX;
-//			this.y = nuevoY;
-//		}
-//
-//		this.x += this.velocidadx;
-//		this.y += this.velocidadY;
-//
-//		// Cambia la dirección en el eje X cada cierta cantidad de pasos
-//		if (this.y % this.cambioDireccion == 0) {
-//			this.velocidadx = -this.velocidadx;
-//		}
 	}
 
 	public Point[] tamanio() {
@@ -199,7 +153,12 @@ public class Destructor {
 	}
 
 	public Rayo disparar() {
-		return new Rayo(x, y, 3.4,angulo);
+		if (!this.kamikaze) {
+			return new Rayo(x, y, 3.4,angulo);
+		}
+		else {
+			return null;
+		}
 	}
 
 	public boolean estaDibujando(Entorno entorno) {

@@ -15,7 +15,7 @@ public class Nivel {
 	}
 	
 	static String boss() {
-		return "0100000010";
+		return "0101001010";
 	}
 	
 }

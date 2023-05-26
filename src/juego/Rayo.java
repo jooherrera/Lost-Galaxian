@@ -30,15 +30,13 @@ public class Rayo {
 	}
 
 	public void dibujar(Entorno entorno, Image imagen) {
-//		entorno.dibujarRectangulo(centro.getX(),y, alto, ancho, angulo , Color.red);
-//		entorno.dibujarCirculo(x, y, 6, Color.blue);
 		entorno.dibujarImagen(imagen, x, y, angulo);
 		if (!estaDibujando(entorno))
 			destruir();
 	}
 
 	public void mover() {
-		this.y +=Math.sin(angulo) * this.velocidad;
+		this.y += Math.sin(angulo) * this.velocidad;
 		this.x += Math.cos(angulo) * this.velocidad;
 	}
 
