@@ -49,9 +49,10 @@ public class Juego extends InterfaceJuego {
 	private double posicionImagenFondo;
 
 	Juego() {
+		Herramientas.loop("sonidos/musica.wav");
 		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
 		Pantalla.setearEntorno(this.entorno);
-		this.nivel = 1;
+		this.nivel = 4;
 		this.puntajeTotal = 0;
 		this.totalEliminados = 0;
 		this.PUNTOS_POR_DESTRUCTOR = 10;
