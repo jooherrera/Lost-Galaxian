@@ -11,11 +11,12 @@ public class Nivel {
 	}
 	
 	static String tres() {
-		return "0111111110";
+		return "01101110110";
 	}
 	
 	static String boss() {
-		return "0100000010";
+		return "1110020111";
+
 	}
 	
 }
