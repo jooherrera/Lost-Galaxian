@@ -5,17 +5,17 @@ public class Nivel {
 	static String uno() {
 		return "00101001010";
 	}
-	
+
 	static String dos() {
 		return "01100110010";
 	}
-	
+
 	static String tres() {
-		return "0111111110";
+//    return "01101110110";
+		return "0000010000";
 	}
-	
+
 	static String boss() {
-		return "0101001010";
+		return "1110020111";
 	}
-	
 }

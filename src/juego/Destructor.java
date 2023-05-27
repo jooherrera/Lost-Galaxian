@@ -1,47 +1,58 @@
 package juego;
 
+import entorno.Entorno;
+import entorno.Herramientas;
 import java.awt.Image;
 import java.awt.Point;
 
-import entorno.Entorno;
-import entorno.Herramientas;
-
 public class Destructor {
+
 	private double x;
 	private double y;
 	private double ancho;
 	private double alto;
 	private double angulo;
-	
 	private double velocidadX;
-	private double direccion;
 	private double velocidadY;
 	private boolean destruido;
 	private boolean movil;
-	private int DANIO_ASTRO;
+	private int DANIO_A_ASTROMEGASHIP;
 	private boolean kamikaze;
 
 	public Destructor(double x, double y, double ancho, double alto, double velocidad, double angulo) {
 		this.x = x;
 		this.y = y;
-		this.ancho = 60;
-		this.alto = 60;
+		this.ancho = ancho;
+		this.alto = alto;
 		this.angulo = angulo;
-		this.direccion = angulo;
+
 		this.velocidadX = .5; // Ajusta la velocidad en el eje X
 		this.velocidadY = velocidad; // Ajusta la velocidad en el eje Y
 		this.movil = true;
-		this.DANIO_ASTRO = 20;
 		this.kamikaze = false;
+		this.DANIO_A_ASTROMEGASHIP = 20;
 	}
 
-	
+	public void dibujar(Entorno entorno, Image imagen) {
+		entorno.dibujarImagen(imagen, x, y, angulo);
+	}
+
+	public void mover() {
+		if (kamikaze) {
+			this.y += Math.sin(angulo) * 2;
+			this.x += Math.cos(angulo) * 2;
+			return;
+		}
+
+		if (movil)
+			y += Math.sin(angulo) * velocidadY;
+	}
+
 	boolean estaEnRango(AstroMegaShip nave) {
 		boolean valor = false;
 		Point[] mallaDeLaAstro = nave.tamanio();
 		Point[] mallaDelDestructor = this.tamanio();
 
-		// Comprueba si la nave esta dentro del espacio del rayo o viceversa.
 		for (int i = 0; i < 4; i++) {
 			Boolean estaDentroDelRangoX = mallaDelDestructor[0].getX() < mallaDeLaAstro[i].getX()
 					&& mallaDeLaAstro[i].getX() < mallaDelDestructor[3].getX();
@@ -60,76 +71,48 @@ public class Destructor {
 	}
 
 	public void inmovilizar() {
-		this.movil = false;
+		movil = false;
 	}
 
 	public void movilizar() {
-		this.movil = true;
+		movil = true;
 	}
 
-	// Metodo para que de su posicion
-	Point posicion() {
-		Point centroNave = new Point((int) this.x, (int) this.y);
+	public Point posicion() {
+		Point centroNave = new Point((int) x, (int) y);
 		return centroNave;
 	}
 
 	public void apuntar(AstroMegaShip nave) {
-		
-		double catetoA = nave.posicion().getX() - this.x; // Cateto Adyacente
-		double catetoO = nave.posicion().getY() - this.y; // Cateto Opuesto
-		
+		if (nave == null)
+			return;
+		double catetoA = nave.posicion().getX() - x;
+		double catetoO = nave.posicion().getY() - y;
 		double grados = Math.toDegrees(Math.atan(catetoO / catetoA));
-		
-		double nuevoGrado = 0;
-		
-		if(grados > 0) 
-			 nuevoGrado = (Math.abs(grados) - Math.toDegrees(direccion));
-		else
-			nuevoGrado = Math.abs(Math.abs(grados) - Math.toDegrees(direccion));
-		
-		this.angulo = direccion + Herramientas.radianes(nuevoGrado);
-
-	}
-
-	public void dibujar(Entorno entorno, Image imagen) {
-		entorno.dibujarImagen(imagen, this.x, this.y, angulo);
-//		if(!estaDibujando(entorno)) {
-//			y = -50;
-//		}
+		double nuevoGrado = grados > 0 ? grados : 180 + grados;
+		angulo = Herramientas.radianes(nuevoGrado);
 	}
 
 	public void NoApuntar() {
-		this.angulo = Herramientas.radianes(90);
+		angulo = Herramientas.radianes(90);
 	}
 
-	void moverDerecha(Entorno entorno) {
+	public void moverDerecha(Entorno entorno) {
 		if (!movil)
 			return;
 		if (x + ancho / 2 < entorno.ancho())
-			this.x = this.x + velocidadX;
+			x = x + velocidadX;
 	}
 
-	// Metodo para que la nave se dirija a la izquierda
 	void moverIzquierda(Entorno entorno) {
 		if (!movil)
 			return;
 		if (x - ancho / 2 > 0)
-			this.x = this.x - velocidadX;
+			x = x - velocidadX;
 	}
-	
+
 	public void kamikaze() {
-		this.kamikaze = true;
-	}
-	
-	public void mover() {
-		if (kamikaze) {
-			this.y += Math.sin(angulo) * 2;
-			this.x += Math.cos(angulo) * 2;
-			return;
-		}
-		if (movil) {
-			y += Math.sin(angulo) * velocidadY;
-		}
+		kamikaze = true;
 	}
 
 	public Point[] tamanio() {
@@ -141,22 +124,24 @@ public class Destructor {
 	}
 
 	public void destruir() {
-		this.destruido = true;
+		destruido = true;
 	}
 
 	public boolean estaDestruido() {
-		return this.destruido;
+		return destruido;
 	}
 
 	void golpear(AstroMegaShip nave) {
-		nave.descontarVida(DANIO_ASTRO);
+		if (estaEnRango(nave) && !destruido) {
+			nave.descontarVida(DANIO_A_ASTROMEGASHIP);
+			destruir();
+		}
 	}
 
-	public Rayo disparar() {
+	public RayoIon disparar() {
 		if (!this.kamikaze) {
-			return new Rayo(x, y, 3.4,angulo);
-		}
-		else {
+			return new RayoIon(x, y, 8, 50, 3.4, angulo);
+		} else {
 			return null;
 		}
 	}
@@ -167,5 +152,4 @@ public class Destructor {
 			return false;
 		return true;
 	}
-
 }
