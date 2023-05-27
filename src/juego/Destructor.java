@@ -140,7 +140,6 @@ public class Destructor {
 
 	public RayoIon disparar(Entorno entorno) {
 		if (!this.kamikaze && y < entorno.alto() && y > 0) {
-			Herramientas.play("sonidos/disparoenemigo.wav");
 			return new RayoIon(x, y, 8, 50, 3.4, angulo);
 		}
 		return null;

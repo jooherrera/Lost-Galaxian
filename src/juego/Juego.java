@@ -172,8 +172,12 @@ public class Juego extends InterfaceJuego {
 			Destructor destructor = destructores[j];
 			if (destructor == null)
 				continue;
-			destructor.dibujar(entorno, imagenDelDestructor);
-			destructor.mover();
+
+				destructor.dibujar(entorno, imagenDelDestructor);
+				destructor.mover();
+			
+			
+			
 			// ------ MOVIMIENTO EN ZIG-ZAG -----
 			if (temporizador / 60 > 2) {
 				destructor.moverDerecha(entorno);
@@ -199,8 +203,12 @@ public class Juego extends InterfaceJuego {
 			}
 
 			int numeroAleatorio = random.nextInt(100);
-			if (rayosEnemigos[j] == null && numeroAleatorio > 95)
+			if (rayosEnemigos[j] == null && numeroAleatorio > 95) {
 				rayosEnemigos[j] = destructor.disparar(entorno);
+				if(rayosEnemigos[j] != null)
+					Herramientas.play("sonidos/disparoenemigo.wav");
+			}
+			
 
 			if (!destructor.estaDibujando(entorno)) {
 				fueraDePantalla++;
@@ -212,14 +220,10 @@ public class Juego extends InterfaceJuego {
 
 			destructor.golpear(astroMegaShip);
 			
-			int valorAleatorio = random.nextInt(250);
-			while (valorAleatorio <= 246 && destructor.estaDestruido()) {
-				destructor.dibujar(entorno, imagenColision);
-				valorAleatorio = random.nextInt(250);
-			}
+		
 
-			
-			if (destructor.estaDestruido()) {
+	
+			if (destructor.estaDestruido() ) {
 				enemigoEliminado(PUNTOS_POR_DESTRUCTOR);
 				destructores[j] = null;
 			}
