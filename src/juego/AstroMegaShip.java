@@ -63,6 +63,7 @@ public class AstroMegaShip {
 	}
 
 	public Rayo disparar() {
+		Herramientas.play("sonidos/blasterAstro.wav");
 		return new Rayo(x, y - alto / 2, 8, 50, 7, Herramientas.radianes(270));
 	}
 

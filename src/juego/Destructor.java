@@ -48,7 +48,7 @@ public class Destructor {
 			y += Math.sin(angulo) * velocidadY;
 	}
 
-	boolean estaEnRango(AstroMegaShip nave) {
+	private boolean estaEnRango(AstroMegaShip nave) {
 		boolean valor = false;
 		Point[] mallaDeLaAstro = nave.tamanio();
 		Point[] mallaDelDestructor = this.tamanio();
@@ -138,12 +138,12 @@ public class Destructor {
 		}
 	}
 
-	public RayoIon disparar() {
-		if (!this.kamikaze) {
+	public RayoIon disparar(Entorno entorno) {
+		if (!this.kamikaze && y < entorno.alto() && y > 0) {
+			Herramientas.play("sonidos/disparoenemigo.wav");
 			return new RayoIon(x, y, 8, 50, 3.4, angulo);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	public boolean estaDibujando(Entorno entorno) {
