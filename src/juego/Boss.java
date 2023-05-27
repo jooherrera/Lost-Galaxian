@@ -55,6 +55,7 @@ public class Boss {
 	}
 
 	public RayoBoss disparar() {
+		Herramientas.play("sonidos/disparojefe.wav");
 		return new RayoBoss(x, y, 4, angulo);
 	}
 
