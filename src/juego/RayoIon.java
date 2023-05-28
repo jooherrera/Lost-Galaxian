@@ -12,7 +12,7 @@ public class RayoIon {
 	private double velocidad;
 	private double angulo;
 	private boolean destruido;
-	private int DANIO_A_ASTROMEGASHIP = 7;
+	private int DANIO_A_ASTROMEGASHIP = 10;
 
 	RayoIon(double x, double y, double ancho, double alto, double velocidad, double angulo) {
 		this.x = x;

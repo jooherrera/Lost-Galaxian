@@ -52,7 +52,7 @@ public class Juego extends InterfaceJuego {
 	Juego() {
 		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
 		Pantalla.setearEntorno(this.entorno);
-		this.nivel = 1;
+		this.nivel = 2;
 		this.puntajeTotal = 0;
 		this.totalEliminados = 0;
 		this.PUNTOS_POR_DESTRUCTOR = 10;
@@ -196,10 +196,6 @@ public class Juego extends InterfaceJuego {
 				boolean esPar = j % 2 == 0 ? true : false;
 				if (esPar) {
 					destructor.kamikaze();
-//					if (destructor.posicion().getY() > astroMegaShip.posicion().getY() - 20) {
-//						destructor.movilizar();
-//						destructor.NoApuntar();
-//					}
 				}
 			}
 
@@ -220,10 +216,7 @@ public class Juego extends InterfaceJuego {
 			}
 
 			destructor.golpear(astroMegaShip);
-			
-		
 
-	
 			if (destructor.estaDestruido() ) {
 				enemigoEliminado(PUNTOS_POR_DESTRUCTOR);
 				destructores[j] = null;

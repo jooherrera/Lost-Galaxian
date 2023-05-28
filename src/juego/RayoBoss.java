@@ -13,7 +13,7 @@ public class RayoBoss {
 	private double velocidad;
 	private double angulo;
 	private boolean destruido;
-	private int DANIO_A_ASTROMEGASHIP = 18;
+	private int DANIO_A_ASTROMEGASHIP = 20;
 
 	RayoBoss(double x, double y, double velocidad, double angulo) {
 		this.x = x;

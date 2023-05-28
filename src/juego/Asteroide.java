@@ -21,7 +21,7 @@ public class Asteroide {
 		this.velocidad = velocidad;
 		this.angulo = angulo;
 		this.destruido = false;
-		this.DANIO_A_ASTROMEGASHIP = 3;
+		this.DANIO_A_ASTROMEGASHIP = 20;
 	}
 
 	public void dibujar(Entorno entorno, Image imagen) {
@@ -52,7 +52,7 @@ public class Asteroide {
 		destruido = true;
 	}
 
-	boolean estaDestruido() {
+	public boolean estaDestruido() {
 		return destruido;
 	}
 

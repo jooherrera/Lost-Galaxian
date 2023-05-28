@@ -26,21 +26,21 @@ public class AstroMegaShip {
 		this.destruido = false;
 	}
 
-	void dibujar(Entorno entorno, Image imagen) {
+	public void dibujar(Entorno entorno, Image imagen) {
 		entorno.dibujarImagen(imagen, x, y, angulo);
 	}
 
-	void moverDerecha(Entorno entorno) {
+	public void moverDerecha(Entorno entorno) {
 		if (x + ancho / 2 < entorno.ancho())
 			x = x + velocidad;
 	}
 
-	void moverIzquierda(Entorno entorno) {
+	public void moverIzquierda(Entorno entorno) {
 		if (x - ancho / 2 > 0)
 			x = x - velocidad;
 	}
 
-	Point posicion() {
+	public Point posicion() {
 		Point centroNave = new Point(x, y);
 		return centroNave;
 	}

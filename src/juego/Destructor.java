@@ -29,7 +29,7 @@ public class Destructor {
 		this.velocidadY = velocidad; // Ajusta la velocidad en el eje Y
 		this.movil = true;
 		this.kamikaze = false;
-		this.DANIO_A_ASTROMEGASHIP = 20;
+		this.DANIO_A_ASTROMEGASHIP = 25;
 	}
 
 	public void dibujar(Entorno entorno, Image imagen) {
@@ -107,7 +107,7 @@ public class Destructor {
 			x = x + velocidadX;
 	}
 
-	void moverIzquierda(Entorno entorno) {
+	public void moverIzquierda(Entorno entorno) {
 		if (!movil)
 			return;
 		if (x - ancho / 2 > 0)
@@ -115,6 +115,7 @@ public class Destructor {
 	}
 
 	public void kamikaze() {
+		DANIO_A_ASTROMEGASHIP = 50;
 		kamikaze = true;
 	}
 
@@ -134,7 +135,7 @@ public class Destructor {
 		return destruido;
 	}
 
-	void golpear(AstroMegaShip nave) {
+	public void golpear(AstroMegaShip nave) {
 		if (estaEnRango(nave) && !destruido) {
 			nave.descontarVida(DANIO_A_ASTROMEGASHIP);
 			destruir();
