@@ -5,11 +5,9 @@ import java.awt.Font;
 import java.awt.Image;
 
 import entorno.Entorno;
-import entorno.Herramientas;
 
 public class Pantalla {
 
-	private static Image imagenHpBoss = Herramientas.cargarImagen("imagenes/hp2.png");
 	private static Entorno entorno = null;
 
 	public static void setearEntorno(Entorno e) {
@@ -63,14 +61,14 @@ public class Pantalla {
 		entorno.escribirTexto("Puntos: " + numeroEnString, 10, 30);
 	}
 
-	public static void dibujarBossStatus(Boss boss) {
+	public static void dibujarBossStatus(Boss boss, Image imagen) {
 		if (boss == null)
 			return;
 		int vida = boss.vidaDisponible() * 210 / boss.vidaInicial();
 		int posInicial = 90;
 		int ancho = boss.vidaDisponible() * 105 / boss.vidaInicial();
 		entorno.dibujarRectangulo(entorno.ancho() / 2 - posInicial + ancho, 30, vida, 18, 0, Color.red);
-		entorno.dibujarImagen(imagenHpBoss, entorno.ancho() / 2, 30, 0);
+		entorno.dibujarImagen(imagen, entorno.ancho() / 2, 30, 0);
 	}
 
 	public static void dibujarCantidadEliminados(int valor) {

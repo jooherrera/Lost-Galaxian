@@ -25,8 +25,7 @@ public class Destructor {
 		this.ancho = ancho;
 		this.alto = alto;
 		this.angulo = angulo;
-
-		this.velocidadX = .5; // Ajusta la velocidad en el eje X
+		this.velocidadX = .4; // Ajusta la velocidad en el eje X
 		this.velocidadY = velocidad; // Ajusta la velocidad en el eje Y
 		this.movil = true;
 		this.kamikaze = false;
@@ -39,8 +38,6 @@ public class Destructor {
 
 	public void mover() {
 		if (kamikaze) {
-			
-			
 			this.y += Math.sin(angulo) * 2;
 			this.x += Math.cos(angulo) * 2;
 			return;
@@ -88,12 +85,10 @@ public class Destructor {
 	public void apuntar(AstroMegaShip nave) {
 		if (nave == null)
 			return;
-		
-		if(y > nave.posicion().getY() - 150) 
+
+		if (y > nave.posicion().getY() - 100)
 			return;
-		
-		
-		
+
 		double catetoA = nave.posicion().getX() - x;
 		double catetoO = nave.posicion().getY() - y;
 		double grados = Math.toDegrees(Math.atan(catetoO / catetoA));

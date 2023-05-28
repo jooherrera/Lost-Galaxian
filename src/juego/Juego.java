@@ -10,6 +10,7 @@ public class Juego extends InterfaceJuego {
 
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
+	
 	// Estado del juego
 	private int puntajeTotal;
 	private int totalEliminados;
@@ -25,15 +26,15 @@ public class Juego extends InterfaceJuego {
 	private int temporizador;
 
 	// Imagenes
+	private Image imagenHpBoss = Herramientas.cargarImagen("imagenes/hp.png");
 	private Image imagenFondo = Herramientas.cargarImagen("imagenes/fondo.png");
-	private Image imagenDelRayo = Herramientas.cargarImagen("imagenes/rayo2.png");
+	private Image imagenDelRayo = Herramientas.cargarImagen("imagenes/rayo.png");
 	private Image imagenDelRayoIon = Herramientas.cargarImagen("imagenes/rayoIonDestructor.png");
 	private Image imagenDelAsteroide = Herramientas.cargarImagen("imagenes/asteroide.png");
-	private Image imagenDelDestructor = Herramientas.cargarImagen("imagenes/destructor2.png");
+	private Image imagenDelDestructor = Herramientas.cargarImagen("imagenes/destructor.png");
 	private Image imagenDelBoss = Herramientas.cargarImagen("imagenes/boss.png");
 	private Image imagenAstroMegaShip = Herramientas.cargarImagen("imagenes/astro.png");
 	private Image imagenDelRayoBoss = Herramientas.cargarImagen("imagenes/rayoBoss.png");
-	private Image imagenColision = Herramientas.cargarImagen("imagenes/explosionAsteroide.png");
 
 	// Entidades
 	private Rayo rayoAstro;
@@ -51,12 +52,12 @@ public class Juego extends InterfaceJuego {
 	Juego() {
 		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
 		Pantalla.setearEntorno(this.entorno);
-		this.nivel = 4;
+		this.nivel = 1;
 		this.puntajeTotal = 0;
 		this.totalEliminados = 0;
 		this.PUNTOS_POR_DESTRUCTOR = 10;
 		this.PUNTOS_POR_BOSS = 50;
-		this.VELOCIDAD_IMAGEN_FONDO = 0.3;
+		this.VELOCIDAD_IMAGEN_FONDO = 2;
 		this.enemigosRestantes = 0;
 		this.estaGanado = false;
 		this.estaPerdido = false;
@@ -114,9 +115,9 @@ public class Juego extends InterfaceJuego {
 		}
 
 		// ----------------------- DIBUJA EL FONDO ----------------------
-		posicionImagenFondo -= VELOCIDAD_IMAGEN_FONDO;
-		if (posicionImagenFondo <= 0)
-			posicionImagenFondo = 600;
+		posicionImagenFondo += VELOCIDAD_IMAGEN_FONDO;
+		if (posicionImagenFondo >= 600)
+			posicionImagenFondo = 0;
 
 		entorno.dibujarImagen(imagenFondo, 400, posicionImagenFondo - 300, 0);
 		entorno.dibujarImagen(imagenFondo, 400, posicionImagenFondo + 300, 0);
@@ -280,7 +281,7 @@ public class Juego extends InterfaceJuego {
 	private void infoDelJuego() {
 		Pantalla.dibujarPuntaje(puntajeTotal);
 		Pantalla.dibujarCantidadEliminados(totalEliminados);
-		Pantalla.dibujarBossStatus(boss);
+		Pantalla.dibujarBossStatus(boss, imagenHpBoss);
 		Pantalla.dibujarAstroMegaShipStatus(astroMegaShip);
 
 		if (enemigosRestantes == 0) {
@@ -329,7 +330,7 @@ public class Juego extends InterfaceJuego {
 						numeroAleatorio = random.nextInt(200);
 					}
 
-					destructores[i] = new Destructor(85 + (i * 70), -numeroAleatorio, 60, 60, 1 * nivel,
+					destructores[i] = new Destructor(85 + (i * 70), -numeroAleatorio, 60, 60, 0.7 * nivel,
 							Herramientas.radianes(90));
 				} else {
 					destructores[i] = new Destructor(85 + (i * 70), 120, 60, 60, 1, Herramientas.radianes(90));
@@ -359,7 +360,7 @@ public class Juego extends InterfaceJuego {
 					}
 
 					nuevaDistribucion[posicionAleatoria] = new Destructor(85 + (posicionAleatoria * 70),
-							-numeroAleatorio, 60, 60, 1 * nivel, Herramientas.radianes(90));
+							-numeroAleatorio, 60, 60, 0.7 * nivel, Herramientas.radianes(90));
 					break;
 				}
 			}

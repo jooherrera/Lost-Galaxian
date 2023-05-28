@@ -7,12 +7,11 @@ public class Nivel {
 	}
 
 	static String dos() {
-		return "01100110010";
+		return "00100110000";
 	}
 
 	static String tres() {
-//    return "01101110110";
-		return "0000010000";
+		return "00101110100";
 	}
 
 	static String boss() {

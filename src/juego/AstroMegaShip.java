@@ -1,6 +1,5 @@
 package juego;
 
-
 import java.awt.Image;
 import java.awt.Point;
 import entorno.Entorno;

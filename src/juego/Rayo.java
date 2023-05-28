@@ -13,7 +13,6 @@ public class Rayo {
 	private double velocidad;
 	private double angulo;
 	private boolean destruido;
-
 	private int DANIO_A_ASTROMEGASHIP = 7;
 	private int DANIO_A_BOSS = 56;
 
