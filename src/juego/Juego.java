@@ -52,7 +52,7 @@ public class Juego extends InterfaceJuego {
 	Juego() {
 		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
 		Pantalla.setearEntorno(this.entorno);
-		this.nivel = 2;
+		this.nivel = 1;
 		this.puntajeTotal = 0;
 		this.totalEliminados = 0;
 		this.PUNTOS_POR_DESTRUCTOR = 10;
