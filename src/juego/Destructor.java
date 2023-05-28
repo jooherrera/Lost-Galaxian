@@ -39,6 +39,8 @@ public class Destructor {
 
 	public void mover() {
 		if (kamikaze) {
+			
+			
 			this.y += Math.sin(angulo) * 2;
 			this.x += Math.cos(angulo) * 2;
 			return;
@@ -86,6 +88,12 @@ public class Destructor {
 	public void apuntar(AstroMegaShip nave) {
 		if (nave == null)
 			return;
+		
+		if(y > nave.posicion().getY() - 150) 
+			return;
+		
+		
+		
 		double catetoA = nave.posicion().getX() - x;
 		double catetoO = nave.posicion().getY() - y;
 		double grados = Math.toDegrees(Math.atan(catetoO / catetoA));

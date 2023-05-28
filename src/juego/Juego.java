@@ -49,7 +49,6 @@ public class Juego extends InterfaceJuego {
 	private double posicionImagenFondo;
 
 	Juego() {
-		Herramientas.loop("sonidos/musica.wav");
 		this.entorno = new Entorno(this, "Lost Galaxian - Grupo ... - v1", 800, 600);
 		Pantalla.setearEntorno(this.entorno);
 		this.nivel = 4;
@@ -196,10 +195,10 @@ public class Juego extends InterfaceJuego {
 				boolean esPar = j % 2 == 0 ? true : false;
 				if (esPar) {
 					destructor.kamikaze();
-					if (destructor.posicion().getY() > astroMegaShip.posicion().getY() - 20) {
-						destructor.movilizar();
-						destructor.NoApuntar();
-					}
+//					if (destructor.posicion().getY() > astroMegaShip.posicion().getY() - 20) {
+//						destructor.movilizar();
+//						destructor.NoApuntar();
+//					}
 				}
 			}
 
@@ -383,6 +382,8 @@ public class Juego extends InterfaceJuego {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		Juego juego = new Juego();
+		Herramientas.loop("sonidos/musica.wav");
+
 	}
 
 	public static void salirDelJuego() {
