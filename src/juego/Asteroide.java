@@ -11,8 +11,8 @@ public class Asteroide {
 	private double radio;
 	private double velocidad;
 	private double angulo;
-	private boolean destruido;
-	private int DANIO_A_ASTROMEGASHIP;
+	private boolean destruido = false;
+	private int DANIO_A_ASTROMEGASHIP = 20;
 
 	Asteroide(double x, double y, double radio, double velocidad, double angulo) {
 		this.x = x;
@@ -20,8 +20,6 @@ public class Asteroide {
 		this.radio = radio;
 		this.velocidad = velocidad;
 		this.angulo = angulo;
-		this.destruido = false;
-		this.DANIO_A_ASTROMEGASHIP = 20;
 	}
 
 	public void dibujar(Entorno entorno, Image imagen) {

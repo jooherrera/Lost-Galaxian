@@ -12,7 +12,7 @@ public class Rayo {
 	private double ancho;
 	private double velocidad;
 	private double angulo;
-	private boolean destruido;
+	private boolean destruido = false;
 	private int DANIO_A_BOSS = 56;
 
 	Rayo(double x, double y, double ancho, double alto, double velocidad, double angulo) {
@@ -22,7 +22,6 @@ public class Rayo {
 		this.ancho = ancho;
 		this.alto = alto;
 		this.angulo = angulo;
-		this.destruido = false;
 	}
 
 	public void dibujar(Entorno entorno, Image imagen) {

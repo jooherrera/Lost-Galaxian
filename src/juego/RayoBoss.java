@@ -1,6 +1,5 @@
 package juego;
 
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.Point;
 
@@ -13,7 +12,7 @@ public class RayoBoss {
 	private double ancho;
 	private double velocidad;
 	private double angulo;
-	private boolean destruido;
+	private boolean destruido = false;
 	private int DANIO_A_ASTROMEGASHIP = 20;
 
 	RayoBoss(double x, double y,double ancho,double alto, double velocidad, double angulo) {
@@ -23,7 +22,6 @@ public class RayoBoss {
 		this.ancho = ancho;
 		this.alto = alto;
 		this.angulo = angulo;
-		this.destruido = false;
 	}
 
 	public void dibujar(Entorno entorno, Image imagen) {

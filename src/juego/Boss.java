@@ -14,7 +14,7 @@ public class Boss {
 	private double angulo;
 	private int hp;
 	private int hpInicial;
-	private boolean destruido;
+	private boolean destruido = false;
 
 	Boss(double x, double y, double ancho, double alto, int hp, double angulo) {
 		this.x = x;

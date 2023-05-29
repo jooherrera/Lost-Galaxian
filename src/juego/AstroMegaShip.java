@@ -1,6 +1,6 @@
 package juego;
 
-import java.awt.Color;
+
 import java.awt.Image;
 import java.awt.Point;
 import entorno.Entorno;
@@ -13,8 +13,8 @@ public class AstroMegaShip {
 	private int ancho;
 	private int velocidad;
 	private double angulo;
-	private int hp;
-	private boolean destruido;
+	private int hp = 100;
+	private boolean destruido = false;
 
 	AstroMegaShip(int x, int y, int alto, int ancho, int velocidad, double angulo) {
 		this.x = x;
@@ -23,8 +23,6 @@ public class AstroMegaShip {
 		this.ancho = ancho;
 		this.velocidad = velocidad;
 		this.angulo = angulo;
-		this.hp = 100;
-		this.destruido = false;
 	}
 
 	public void dibujar(Entorno entorno, Image imagen) {

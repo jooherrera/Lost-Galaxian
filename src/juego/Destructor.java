@@ -12,13 +12,13 @@ public class Destructor {
 	private double ancho;
 	private double alto;
 	private double angulo;
-	private double velocidadX;
+	private double VELOCIDADX = .4;
 	private double velocidadY;
 	private boolean destruido;
-	private boolean movil;
+	private boolean movil = true;
+	private boolean kamikaze = false;
 	private int DANIO_A_ASTROMEGASHIP = 25;
 	private int DANIO_KAMIKAZE = 50;
-	private boolean kamikaze;
 
 	public Destructor(double x, double y, double ancho, double alto, double velocidad, double angulo) {
 		this.x = x;
@@ -26,10 +26,7 @@ public class Destructor {
 		this.ancho = ancho;
 		this.alto = alto;
 		this.angulo = angulo;
-		this.velocidadX = .4; // Ajusta la velocidad en el eje X
 		this.velocidadY = velocidad; // Ajusta la velocidad en el eje Y
-		this.movil = true;
-		this.kamikaze = false;
 	}
 
 	public void dibujar(Entorno entorno, Image imagen) {
@@ -96,14 +93,14 @@ public class Destructor {
 		if (!movil)
 			return;
 		if (x + ancho / 2 < entorno.ancho())
-			x = x + velocidadX;
+			x = x + VELOCIDADX;
 	}
 
 	public void moverIzquierda(Entorno entorno) {
 		if (!movil)
 			return;
 		if (x - ancho / 2 > 0)
-			x = x - velocidadX;
+			x = x - VELOCIDADX;
 	}
 
 	public void kamikaze() {
