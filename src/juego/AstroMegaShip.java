@@ -1,5 +1,6 @@
 package juego;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Point;
 import entorno.Entorno;
@@ -28,7 +29,7 @@ public class AstroMegaShip {
 
 	public void dibujar(Entorno entorno, Image imagen) {
 		entorno.dibujarImagen(imagen, x, y, angulo);
-	}
+}
 
 	public void moverDerecha(Entorno entorno) {
 		if (x + ancho / 2 < entorno.ancho())
@@ -54,10 +55,10 @@ public class AstroMegaShip {
 	}
 
 	public Point[] tamanio() {
-		Point p1 = new Point((int) (x - ancho * .5), (int) (y + alto * .5));
+		Point p1 = new Point((int) (x - ancho * .5), (int) (y + alto * .3));
 		Point p2 = new Point((int) (x - ancho * .5), (int) (y - alto * .1));
 		Point p3 = new Point((int) (x + ancho * .5), (int) (y - alto * .1));
-		Point p4 = new Point((int) (x + ancho * .5), (int) (y + alto * .5));
+		Point p4 = new Point((int) (x + ancho * .5), (int) (y + alto * .3));
 		return new Point[] { p1, p2, p3, p4 };
 	}
 
