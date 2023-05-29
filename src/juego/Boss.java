@@ -24,7 +24,6 @@ public class Boss {
 		this.angulo = angulo;
 		this.hp = hp;
 		this.hpInicial = hp;
-		this.destruido = false;
 	}
 
 	public void dibujar(Entorno entorno, Image image) {
