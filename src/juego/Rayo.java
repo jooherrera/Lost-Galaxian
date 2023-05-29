@@ -13,7 +13,6 @@ public class Rayo {
 	private double velocidad;
 	private double angulo;
 	private boolean destruido;
-	private int DANIO_A_ASTROMEGASHIP = 7;
 	private int DANIO_A_BOSS = 56;
 
 	Rayo(double x, double y, double ancho, double alto, double velocidad, double angulo) {
@@ -43,13 +42,6 @@ public class Rayo {
 		Point p3 = new Point((int) (x + ancho / 2), (int) (y - alto / 2));
 		Point p4 = new Point((int) (x + ancho / 2), (int) (y + alto / 2));
 		return new Point[] { p1, p2, p3, p4 };
-	}
-
-	public void golpear(AstroMegaShip nave) {
-		if (estaEnRango(nave) && !destruido) {
-			nave.descontarVida(DANIO_A_ASTROMEGASHIP);
-			destruir();
-		}
 	}
 
 	public void golpear(Destructor[] naves) {
@@ -123,29 +115,6 @@ public class Rayo {
 	}
 
 	private boolean estaEnRango(Destructor nave) {
-		boolean valor = false;
-		Point[] mallaDeLaNave = nave.tamanio();
-		Point[] mallaDelRayo = this.tamanio();
-
-		for (int i = 0; i < 4; i++) {
-			Boolean estaDentroDelRangoX = mallaDelRayo[0].getX() < mallaDeLaNave[i].getX()
-					&& mallaDeLaNave[i].getX() < mallaDelRayo[3].getX();
-			Boolean estaDentroDelRangoY = mallaDelRayo[2].getY() < mallaDeLaNave[i].getY()
-					&& mallaDeLaNave[i].getY() < mallaDelRayo[3].getY();
-
-			Boolean estaDentroDelRangoX2 = mallaDeLaNave[0].getX() < mallaDelRayo[i].getX()
-					&& mallaDelRayo[i].getX() < mallaDeLaNave[3].getX();
-			Boolean estaDentroDelRangoY2 = mallaDeLaNave[2].getY() < mallaDelRayo[i].getY()
-					&& mallaDelRayo[i].getY() < mallaDeLaNave[3].getY();
-
-			if ((estaDentroDelRangoX || estaDentroDelRangoX2) && (estaDentroDelRangoY || estaDentroDelRangoY2)) {
-				valor = true;
-			}
-		}
-		return valor;
-	}
-
-	private boolean estaEnRango(AstroMegaShip nave) {
 		boolean valor = false;
 		Point[] mallaDeLaNave = nave.tamanio();
 		Point[] mallaDelRayo = this.tamanio();
