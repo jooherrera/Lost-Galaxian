@@ -1,5 +1,6 @@
 package juego;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Point;
 
@@ -15,18 +16,18 @@ public class RayoBoss {
 	private boolean destruido;
 	private int DANIO_A_ASTROMEGASHIP = 20;
 
-	RayoBoss(double x, double y, double velocidad, double angulo) {
+	RayoBoss(double x, double y,double ancho,double alto, double velocidad, double angulo) {
 		this.x = x;
 		this.y = y;
 		this.velocidad = velocidad;
-		this.ancho = 100;
-		this.alto = 16;
+		this.ancho = ancho;
+		this.alto = alto;
 		this.angulo = angulo;
 		this.destruido = false;
 	}
 
 	public void dibujar(Entorno entorno, Image imagen) {
-		entorno.dibujarImagen(imagen, x, y, angulo);
+		entorno.dibujarImagen(imagen, x, y, angulo);		
 		if (!estaDibujando(entorno))
 			destruir();
 	}
@@ -38,8 +39,8 @@ public class RayoBoss {
 
 	public Point[] tamanio() {
 		Point p1 = new Point((int) (x - alto / 2), (int) (y + ancho / 2));
-		Point p2 = new Point((int) (x - alto / 2), (int) (y - ancho / 2));
-		Point p3 = new Point((int) (x + alto / 2), (int) (y - ancho / 2));
+		Point p2 = new Point((int) (x - alto / 2), (int) (y - ancho * .1));
+		Point p3 = new Point((int) (x + alto / 2), (int) (y - ancho * .1));
 		Point p4 = new Point((int) (x + alto / 2), (int) (y + ancho / 2));
 		return new Point[] { p1, p2, p3, p4 };
 	}

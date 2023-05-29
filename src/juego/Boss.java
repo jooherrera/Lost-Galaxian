@@ -24,6 +24,7 @@ public class Boss {
 		this.angulo = angulo;
 		this.hp = hp;
 		this.hpInicial = hp;
+		this.destruido = false;
 	}
 
 	public void dibujar(Entorno entorno, Image image) {
@@ -56,7 +57,7 @@ public class Boss {
 
 	public RayoBoss disparar() {
 		Herramientas.play("sonidos/disparojefe.wav");
-		return new RayoBoss(x, y, 4, angulo);
+		return new RayoBoss(x, y,100,16, 4, angulo);
 	}
 
 	public void destruir() {

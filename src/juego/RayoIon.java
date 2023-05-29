@@ -1,5 +1,6 @@
 package juego;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Point;
 import entorno.Entorno;
@@ -37,8 +38,8 @@ public class RayoIon {
 
 	public Point[] tamanio() {
 		Point p1 = new Point((int) (x - ancho / 2), (int) (y + alto / 2));
-		Point p2 = new Point((int) (x - ancho / 2), (int) (y - alto / 2));
-		Point p3 = new Point((int) (x + ancho / 2), (int) (y - alto / 2));
+		Point p2 = new Point((int) (x - ancho / 2), (int) (y - alto * .1));
+		Point p3 = new Point((int) (x + ancho / 2), (int) (y - alto * .1));
 		Point p4 = new Point((int) (x + ancho / 2), (int) (y + alto / 2));
 		return new Point[] { p1, p2, p3, p4 };
 	}

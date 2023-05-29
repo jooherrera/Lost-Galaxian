@@ -73,10 +73,6 @@ public class Destructor {
 		movil = false;
 	}
 
-	public void movilizar() {
-		movil = true;
-	}
-
 	public Point posicion() {
 		Point centroNave = new Point((int) x, (int) y);
 		return centroNave;
@@ -94,10 +90,6 @@ public class Destructor {
 		double grados = Math.toDegrees(Math.atan(catetoO / catetoA));
 		double nuevoGrado = grados > 0 ? grados : 180 + grados;
 		angulo = Herramientas.radianes(nuevoGrado);
-	}
-
-	public void NoApuntar() {
-		angulo = Herramientas.radianes(90);
 	}
 
 	public void moverDerecha(Entorno entorno) {
